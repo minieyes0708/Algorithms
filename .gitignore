@@ -1,3 +1,6 @@
 /tags
 *.class
 /algs4.jar
+*.class
+edu/
+*.zip
