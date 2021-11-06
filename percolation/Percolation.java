@@ -5,6 +5,8 @@ public class Percolation {
     private int openCount;
     private final int topRow;
     private final int topCol;
+    private final int botRow;
+    private final int botCol;
     private final int ufSize;
     private boolean[][] isOpenFlags;
     private final WeightedQuickUnionUF uf;
@@ -16,7 +18,8 @@ public class Percolation {
         this.n = n;
         this.topRow = 1;
         this.topCol = 0;
-        // open flag
+        this.botRow = n;
+        this.botCol = n + 1;
         this.openCount = 0;
         this.isOpenFlags = new boolean[n + 2][n + 2];
         for (int i = 0; i < n + 2; i++) {
@@ -25,7 +28,7 @@ public class Percolation {
             }
         }
         // with additional top & bottom virtual site
-        this.ufSize = n * n + 1;
+        this.ufSize = n * n + 2;
         this.uf = new WeightedQuickUnionUF(this.ufSize);
     }
     private void connect(int row1, int col1, int row2, int col2)
@@ -56,7 +59,10 @@ public class Percolation {
             connect(row, col, row + 1, col + 0);
         if (row - 1 >= 1 && isOpenFlags[row - 1][col + 0])
             connect(row, col, row - 1, col + 0);
-        if (row == 1) connect(row, col, topRow, topCol);
+        if (row == 1)
+            connect(row, col, topRow, topCol);
+        if (row == n)
+            connect(row, col, botRow, botCol);
     }
     // is the site (row, col) open?
     public boolean isOpen(int row, int col)
@@ -91,10 +97,7 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates()
     {
-        for (int i = 1; i <= n; i++)
-            if (isConnected(topRow, topCol, n, i))
-                return true;
-        return false;
+        return isConnected(botRow, botCol, topRow, topCol);
     }
     // test client (optional)
     public static void main(String[] args)
