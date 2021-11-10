@@ -41,7 +41,7 @@ public class Percolation {
         if (ind2 < 0 || ind2 >= ufSize) throw new IllegalArgumentException();
 
         uf.union(ind1, ind2);
-        if (ind1 != ufSize && ind2 != ufSize) ufFull.union(ind1, ind2);
+        if (ind1 != ufSize - 1 && ind2 != ufSize - 1) ufFull.union(ind1, ind2);
     }
     // opens the site (row, col) if it is not open already
     public void open(int row, int col)
