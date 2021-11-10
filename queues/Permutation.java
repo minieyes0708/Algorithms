@@ -12,12 +12,13 @@ public class Permutation {
         int count = 0;
         while (!StdIn.isEmpty()) {
             count++;
+            String str = StdIn.readString();
             if (count <= maxCount) {
-                queue.enqueue(StdIn.readString());
+                queue.enqueue(str);
             } else {
                 if (StdRandom.bernoulli((double) maxCount / count)) {
                     queue.dequeue();
-                    queue.enqueue(StdIn.readString());
+                    queue.enqueue(str);
                 }
             }
         }
