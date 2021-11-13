@@ -9,6 +9,7 @@
  ******************************************************************************/
 
 import java.util.Comparator;
+import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class Point implements Comparable<Point> {
@@ -75,7 +76,7 @@ public class Point implements Comparable<Point> {
             if (y == that.y) return Double.NEGATIVE_INFINITY;
             else return Double.POSITIVE_INFINITY;
         }
-        return (y - that.y) / (x - that.x);
+        return ((double) y - that.y) / (x - that.x);
     }
 
     /**
@@ -124,30 +125,44 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-        Point[] points = new Point[9];
-        points[0] = new Point(3, 2);
-        points[1] = new Point(3, 3);
-        points[2] = new Point(2, 3);
-        points[3] = new Point(1, 3);
-        points[4] = new Point(1, 2);
-        points[5] = new Point(1, 1);
-        points[6] = new Point(2, 1);
-        points[7] = new Point(3, 1);
-        points[8] = new Point(2, 2);
+        // Point[] points = new Point[9];
+        // points[0] = new Point(3, 2);
+        // points[1] = new Point(3, 3);
+        // points[2] = new Point(2, 3);
+        // points[3] = new Point(1, 3);
+        // points[4] = new Point(1, 2);
+        // points[5] = new Point(1, 1);
+        // points[6] = new Point(2, 1);
+        // points[7] = new Point(3, 1);
+        // points[8] = new Point(2, 2);
 
-        Point pt1 = new Point(2, 2);
-        Comparator<Point> comp = pt1.slopeOrder();
+        // Point pt1 = new Point(2, 2);
+        // Comparator<Point> comp = pt1.slopeOrder();
 
-        for (Point pt2 : points) {
-            System.out.println(pt1 + " slope to " + pt2 + " = " + pt1.slopeTo(pt2));
+        // for (Point pt2 : points) {
+            // System.out.println(pt1 + " slope to " + pt2 + " = " + pt1.slopeTo(pt2));
+        // }
+        // for (Point pt2 : points) {
+            // System.out.println(pt1 + " compare to " + pt2 + " = " + pt1.compareTo(pt2));
+        // }
+        // for (Point pt2 : points) {
+            // for (Point pt3 : points) {
+                // System.out.println(pt1 + " slopeOrder to " + pt2 + ", " + pt3 + " = " + comp.compare(pt2, pt3));
+            // }
+        // }
+        StdDraw.setScale(0, 32767);
+        StdDraw.setPenRadius(0.01);
+        int count = StdIn.readInt();
+        Point[] points = new Point[count];
+        for (int i = 0; i < count; i++) {
+            points[i] = new Point(StdIn.readInt(), StdIn.readInt());
+            points[i].draw();
         }
-        for (Point pt2 : points) {
-            System.out.println(pt1 + " compare to " + pt2 + " = " + pt1.compareTo(pt2));
-        }
-        for (Point pt2 : points) {
-            for (Point pt3 : points) {
-                System.out.println(pt1 + " slopeOrder to " + pt2 + ", " + pt3 + " = " + comp.compare(pt2, pt3));
-            }
+        StdDraw.setPenRadius(0.001);
+        StdDraw.setPenColor(StdDraw.BLUE);
+        for (int i = 1; i < count; i++) {
+            (new LineSegment(points[0], points[i])).draw();
+            StdDraw.text(points[i].x, points[i].y, String.format("%f", points[0].slopeTo(points[i])));
         }
     }
 }
