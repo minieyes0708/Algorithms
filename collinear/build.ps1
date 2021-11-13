@@ -1,0 +1,1 @@
+javac Point.java
