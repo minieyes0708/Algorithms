@@ -41,7 +41,7 @@ public class FastCollinearPoints {
                 endind = i + 2; // go beyond last point
             }
         }
-        if (startind != -1) {
+        if (startind != -1 && endind - startind > 2) {
             Point pt1 = points[curind], pt2 = points[curind];
             for (int i = startind; i < endind; i++) {
                 if (points[i].compareTo(pt1) < 0) pt1 = points[i];
