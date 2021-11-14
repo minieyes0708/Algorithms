@@ -12,22 +12,22 @@ import java.util.Comparator;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdDraw;
 
+class SlopeOrderComparator implements Comparator<Point> {
+    private final Point parent;
+    public SlopeOrderComparator(Point p) {
+        parent = p;
+    }
+    public int compare(Point p1, Point p2) {
+        double diff = parent.slopeTo(p1) - parent.slopeTo(p2);
+        if (diff == 0) return 0;
+        return diff < 0 ? -1 : 1;
+    }
+}
+
 public class Point implements Comparable<Point> {
 
     private final int x;     // x-coordinate of this point
     private final int y;     // y-coordinate of this point
-
-    private class SlopeOrderComparator implements Comparator<Point> {
-        private Point parent;
-        public SlopeOrderComparator(Point p) {
-            parent = p;
-        }
-        public int compare(Point p1, Point p2) {
-            double diff = parent.slopeTo(p1) - parent.slopeTo(p2);
-            if (diff == 0) return 0;
-            return diff < 0 ? -1 : 1;
-        }
-    }
 
     /**
      * Initializes a new point.
@@ -75,6 +75,9 @@ public class Point implements Comparable<Point> {
         if (x == that.x) {
             if (y == that.y) return Double.NEGATIVE_INFINITY;
             else return Double.POSITIVE_INFINITY;
+        }
+        else if (y == that.y) {
+            return 0.0;
         }
         return ((double) y - that.y) / (x - that.x);
     }

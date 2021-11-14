@@ -1,6 +1,5 @@
 import java.util.Arrays;
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdDraw;
 
@@ -29,7 +28,8 @@ public class FastCollinearPoints {
         return result;
     }
     private void findLinePoints(Point[] points, int curind) {
-        startind = endind = -1;
+        endind = -1;
+        startind = -1;
         for (int i = curind + 1; i < points.length - 1; i++)
         {
             if (points[curind].slopeTo(points[i]) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
@@ -94,7 +94,6 @@ public class FastCollinearPoints {
         StdDraw.enableDoubleBuffering();
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);
-        int ind = 0;
         for (Point p : points) {
             p.draw();
         }
