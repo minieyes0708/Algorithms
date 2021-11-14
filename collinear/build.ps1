@@ -1,2 +1,3 @@
 # javac Point.java
-javac BruteCollinearPoints.java
+# javac BruteCollinearPoints.java
+javac FastCollinearPoints.java

@@ -1,2 +1,3 @@
 # cat input10.txt | java Point
-cat input50.txt | java BruteCollinearPoints
+# java BruteCollinearPoints input8.txt
+java FastCollinearPoints input8.txt
