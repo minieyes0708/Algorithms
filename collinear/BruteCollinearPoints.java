@@ -18,7 +18,10 @@ public class BruteCollinearPoints {
                     for (int sind = rind + 1; sind < points.length; sind++) {
                         Point s = points[sind];
                         if (p.slopeTo(q) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
+                        if (p.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
+                        if (p.slopeTo(s) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                         if (q.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
+                        if (q.slopeTo(s) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                         if (r.slopeTo(s) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                         if (p.slopeTo(q) == q.slopeTo(r) && q.slopeTo(r) == r.slopeTo(s)) {
                             Point pt1 = p, pt2 = p;
