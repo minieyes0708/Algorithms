@@ -9,12 +9,12 @@ public class BruteCollinearPoints {
         if (points == null) throw new IllegalArgumentException();
         for (Point pt : points) if (pt == null) throw new IllegalArgumentException();
 
-        for (int pind = 0; pind < points.length - 3; pind++) {
+        for (int pind = 0; pind < points.length; pind++) {
             Point p = points[pind];
-            for (int qind = pind + 1; qind < points.length - 2; qind++) {
+            for (int qind = pind + 1; qind < points.length; qind++) {
                 Point q = points[qind];
                 if (p.slopeTo(q) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
-                for (int rind = qind + 1; rind < points.length - 1; rind++) {
+                for (int rind = qind + 1; rind < points.length; rind++) {
                     Point r = points[rind];
                     if (p.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                     if (q.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
