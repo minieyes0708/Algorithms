@@ -13,14 +13,14 @@ public class BruteCollinearPoints {
             Point p = points[pind];
             for (int qind = pind + 1; qind < points.length - 2; qind++) {
                 Point q = points[qind];
+                if (p.slopeTo(q) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                 for (int rind = qind + 1; rind < points.length - 1; rind++) {
                     Point r = points[rind];
+                    if (p.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
+                    if (q.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                     for (int sind = rind + 1; sind < points.length; sind++) {
                         Point s = points[sind];
-                        if (p.slopeTo(q) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
-                        if (p.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                         if (p.slopeTo(s) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
-                        if (q.slopeTo(r) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                         if (q.slopeTo(s) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                         if (r.slopeTo(s) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
                         if (p.slopeTo(q) == q.slopeTo(r) && q.slopeTo(r) == r.slopeTo(s)) {
