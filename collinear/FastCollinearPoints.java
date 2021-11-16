@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.StdDraw;
 
 public class FastCollinearPoints {
     private int segmentCount = 0;
-    private int startind, endind, curind;
+    private int startind, endind;
     private LineSegment[] lineSegments = null;
     public FastCollinearPoints(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
@@ -15,7 +15,7 @@ public class FastCollinearPoints {
         for (int i = 0; i < points.length; i++)
             backupPoints[i] = points[i];
 
-        for (curind = 0; curind < points.length; curind++) {
+        for (int curind = 0; curind < points.length; curind++) {
             Arrays.sort(backupPoints, 0, backupPoints.length, points[curind].slopeOrder());
 
             endind = -1;
@@ -32,7 +32,7 @@ public class FastCollinearPoints {
             result[i] = lineSegments[i];
         return result;
     }
-    private void findLinePoints(Point[] points, int curind) {
+    private void findLinePoints(Point[] points) {
         for (int i = 1; i < points.length; i++)
         {
             if (points[0].slopeTo(points[i]) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
