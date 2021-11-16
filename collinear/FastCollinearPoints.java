@@ -1,26 +1,49 @@
 import java.util.Arrays;
+import java.util.Comparator;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class FastCollinearPoints {
+    private class PointInfo {
+        private class PointInfoComparator implements Comparator<PointInfo> {
+            private PointInfo parent;
+            public PointInfoComparator(PointInfo info) {
+                parent = info;
+            }
+            public int compare(PointInfo info1, PointInfo info2) {
+                return Double.compare(parent.point.slopeTo(info1.point), parent.point.slopeTo(info2.point));
+            }
+        }
+        public Point point;
+        public boolean visited;
+        public PointInfo(Point pt) {
+            point = pt;
+            visited = false;
+        }
+        public Comparator<PointInfo> slopeOrder() {
+            return new PointInfoComparator(this);
+        }
+    }
     private int segmentCount = 0;
     private int startind, endind;
+    private PointInfo[] pointInfos = null;
     private LineSegment[] lineSegments = null;
     public FastCollinearPoints(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
         for (Point pt : points) if (pt == null) throw new IllegalArgumentException();
 
-        Point[] backupPoints = new Point[points.length];
+        pointInfos = new PointInfo[points.length];
         for (int i = 0; i < points.length; i++)
-            backupPoints[i] = points[i];
+            pointInfos[i] = new PointInfo(points[i]);
 
         for (int curind = 0; curind < points.length; curind++) {
-            Arrays.sort(backupPoints, 0, backupPoints.length, points[curind].slopeOrder());
+            Arrays.sort(pointInfos, 0, pointInfos.length, new PointInfo(points[curind]).slopeOrder());
 
             endind = -1;
             startind = -1;
-            findLinePoints(backupPoints);
+            findLinePoints();
+            pointInfos[0].visited = true;
         }
     }
     public int numberOfSegments() {
@@ -32,14 +55,14 @@ public class FastCollinearPoints {
             result[i] = lineSegments[i];
         return result;
     }
-    private void findLinePoints(Point[] points) {
-        for (int i = 1; i < points.length; i++)
+    private void findLinePoints() {
+        for (int i = 1; i < pointInfos.length; i++)
         {
-            if (points[0].slopeTo(points[i]) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
-            if (i == points.length - 1) continue;
+            if (pointInfos[0].point.slopeTo(pointInfos[i].point) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
+            if (i == pointInfos.length - 1) continue;
 
-            if (points[0].slopeTo(points[i + 1]) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
-            if (points[0].slopeTo(points[i]) == points[0].slopeTo(points[i + 1]))
+            if (pointInfos[0].point.slopeTo(pointInfos[i + 1].point) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
+            if (pointInfos[0].point.slopeTo(pointInfos[i].point) == pointInfos[0].point.slopeTo(pointInfos[i + 1].point))
             {
                 if (startind == -1)
                     startind = i;
@@ -49,12 +72,18 @@ public class FastCollinearPoints {
             {
                 if (startind != -1) {
                     if (endind - startind > 2) {
-                        Point pt1 = points[0], pt2 = points[0];
+                        boolean visited = false;
+                        Point pt1 = pointInfos[0].point, pt2 = pointInfos[0].point;
                         for (int j = startind; j < endind; j++) {
-                            if (points[j].compareTo(pt1) < 0) pt1 = points[j];
-                            if (points[j].compareTo(pt2) > 0) pt2 = points[j];
+                            if (pointInfos[j].visited) {
+                                visited = true;
+                                break;
+                            }
+                            if (pointInfos[j].point.compareTo(pt1) < 0) pt1 = pointInfos[j].point;
+                            if (pointInfos[j].point.compareTo(pt2) > 0) pt2 = pointInfos[j].point;
                         }
-                        addSegment(pt1, pt2);
+                        if (!visited)
+                            addSegment(pt1, pt2);
                     }
                     endind = -1;
                     startind = -1;
@@ -62,12 +91,18 @@ public class FastCollinearPoints {
             }
         }
         if (startind != -1 && endind - startind > 2) {
-            Point pt1 = points[0], pt2 = points[0];
+            boolean visited = false;
+            Point pt1 = pointInfos[0].point, pt2 = pointInfos[0].point;
             for (int i = startind; i < endind; i++) {
-                if (points[i].compareTo(pt1) < 0) pt1 = points[i];
-                if (points[i].compareTo(pt2) > 0) pt2 = points[i];
+                if (pointInfos[i].visited) {
+                    visited = true;
+                    break;
+                }
+                if (pointInfos[i].point.compareTo(pt1) < 0) pt1 = pointInfos[i].point;
+                if (pointInfos[i].point.compareTo(pt2) > 0) pt2 = pointInfos[i].point;
             }
-            addSegment(pt1, pt2);
+            if (!visited)
+                addSegment(pt1, pt2);
         }
     }
     private void resize(int newsize) {
