@@ -112,26 +112,13 @@ public class FastCollinearPoints {
         lineSegments = newLineSegments;
     }
     private void addSegment(Point pt1, Point pt2) {
-        LineSegment newLineSegment = new LineSegment(pt1, pt2);
-
-        boolean findSlope = false;
-        for (int i = 0; i < segmentCount; i++) {
-            if (lineSegments[i].toString().equals(newLineSegment.toString())) {
-                findSlope = true;
-                break;
-            }
-        }
-        if (findSlope) {
-            return;
-        }
-
         if (lineSegments == null) {
             lineSegments = new LineSegment[1];
         }
         if (segmentCount == lineSegments.length - 1) {
             resize(lineSegments.length * 2);
         }
-        lineSegments[segmentCount++] = newLineSegment;
+        lineSegments[segmentCount++] = new LineSegment(pt1, pt2);
     }
     public static void main(String[] args) {
         // read the n points from a file
