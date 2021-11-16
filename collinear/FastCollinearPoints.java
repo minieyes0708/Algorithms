@@ -6,22 +6,21 @@ import edu.princeton.cs.algs4.StdDraw;
 public class FastCollinearPoints {
     private int segmentCount = 0;
     private int startind, endind, curind;
-    private Point[] originalPoints = null;
     private LineSegment[] lineSegments = null;
     public FastCollinearPoints(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
         for (Point pt : points) if (pt == null) throw new IllegalArgumentException();
 
-        originalPoints = new Point[points.length];
+        Point[] backupPoints = new Point[points.length];
         for (int i = 0; i < points.length; i++)
-            originalPoints[i] = points[i];
+            backupPoints[i] = points[i];
 
         for (curind = 0; curind < points.length; curind++) {
-            Arrays.sort(points, 0, points.length, originalPoints[curind].slopeOrder());
+            Arrays.sort(backupPoints, 0, backupPoints.length, points[curind].slopeOrder());
 
             endind = -1;
             startind = -1;
-            findLinePoints(points, curind);
+            findLinePoints(backupPoints, curind);
         }
     }
     public int numberOfSegments() {
