@@ -100,6 +100,8 @@ public class FastCollinearPoints {
         if (findSlope) {
             return;
         }
+        pointsAndSlopes[curind].slopes.add(pt1.slopeTo(pt2));
+
         if (lineSegments == null) {
             lineSegments = new LineSegment[1];
         }
