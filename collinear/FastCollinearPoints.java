@@ -20,7 +20,7 @@ public class FastCollinearPoints {
 
             endind = -1;
             startind = -1;
-            findLinePoints(backupPoints, curind);
+            findLinePoints(backupPoints);
         }
     }
     public int numberOfSegments() {
