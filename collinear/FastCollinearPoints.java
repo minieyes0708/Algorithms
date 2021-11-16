@@ -1,32 +1,23 @@
 import java.util.Arrays;
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class FastCollinearPoints {
-    private class PointWithSlopeBag {
-        public Point point;
-        public Bag<Double> slopes;
-        public PointWithSlopeBag(Point pt) {
-            point = pt;
-            slopes = new Bag<Double>();
-        }
-    }
     private int segmentCount = 0;
     private int startind, endind, curind;
+    private Point[] originalPoints = null;
     private LineSegment[] lineSegments = null;
-    private PointWithSlopeBag[] pointsAndSlopes = null;
     public FastCollinearPoints(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
         for (Point pt : points) if (pt == null) throw new IllegalArgumentException();
 
-        pointsAndSlopes = new PointWithSlopeBag[points.length];
+        originalPoints = new Point[points.length];
         for (int i = 0; i < points.length; i++)
-            pointsAndSlopes[i] = new PointWithSlopeBag(points[i]);
+            originalPoints[i] = points[i];
 
         for (curind = 0; curind < points.length; curind++) {
-            Arrays.sort(points, 0, points.length, pointsAndSlopes[curind].point.slopeOrder());
+            Arrays.sort(points, 0, points.length, originalPoints[curind].slopeOrder());
 
             endind = -1;
             startind = -1;
@@ -78,11 +69,6 @@ public class FastCollinearPoints {
             addSegment(pt1, pt2);
         }
     }
-    private void swap(Point[] points, int ind1, int ind2) {
-        Point tmp = points[ind1];
-        points[ind1] = points[ind2];
-        points[ind2] = tmp;
-    }
     private void resize(int newsize) {
         LineSegment[] newLineSegments = new LineSegment[newsize];
         for (int i = 0; i < segmentCount; i++)
@@ -90,9 +76,11 @@ public class FastCollinearPoints {
         lineSegments = newLineSegments;
     }
     private void addSegment(Point pt1, Point pt2) {
+        LineSegment newLineSegment = new LineSegment(pt1, pt2);
+
         boolean findSlope = false;
-        for (double slope : pointsAndSlopes[curind].slopes) {
-            if (slope == pt1.slopeTo(pt2)) {
+        for (LineSegment seg : lineSegments) {
+            if (seg.toString() == newLineSegment.toString()) {
                 findSlope = true;
                 break;
             }
@@ -100,7 +88,6 @@ public class FastCollinearPoints {
         if (findSlope) {
             return;
         }
-        pointsAndSlopes[curind].slopes.add(pt1.slopeTo(pt2));
 
         if (lineSegments == null) {
             lineSegments = new LineSegment[1];
@@ -108,7 +95,7 @@ public class FastCollinearPoints {
         if (segmentCount == lineSegments.length - 1) {
             resize(lineSegments.length * 2);
         }
-        lineSegments[segmentCount++] = new LineSegment(pt1, pt2);
+        lineSegments[segmentCount++] = newLineSegment;
     }
     public static void main(String[] args) {
         // read the n points from a file
