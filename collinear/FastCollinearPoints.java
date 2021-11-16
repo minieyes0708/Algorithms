@@ -33,9 +33,11 @@ public class FastCollinearPoints {
         return result;
     }
     private void findLinePoints(Point[] points, int curind) {
-        for (int i = 1; i < points.length - 1; i++)
+        for (int i = 1; i < points.length; i++)
         {
             if (points[0].slopeTo(points[i]) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
+            if (i == points.length - 1) continue;
+
             if (points[0].slopeTo(points[i + 1]) == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
             if (points[0].slopeTo(points[i]) == points[0].slopeTo(points[i + 1]))
             {
