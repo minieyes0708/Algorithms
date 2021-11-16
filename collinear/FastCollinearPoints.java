@@ -79,8 +79,8 @@ public class FastCollinearPoints {
         LineSegment newLineSegment = new LineSegment(pt1, pt2);
 
         boolean findSlope = false;
-        for (LineSegment seg : lineSegments) {
-            if (seg.toString() == newLineSegment.toString()) {
+        for (int i = 0; i < segmentCount; i++) {
+            if (lineSegments[i].toString() == newLineSegment.toString()) {
                 findSlope = true;
                 break;
             }
