@@ -9,11 +9,13 @@ public class Solver {
     private class BoardInfo {
         public int moves;
         public Board board;
+        public int manhattan;
         public BoardInfo parent;
         public BoardInfo(int m, Board bd, BoardInfo p) {
             moves = m;
             board = bd;
             parent = p;
+            manhattan = -1;
         }
     }
     private class SolutionIterable implements Iterable<Board> {
@@ -37,7 +39,9 @@ public class Solver {
     }
     private class ManhattanComparator implements Comparator<BoardInfo> {
         public int compare(BoardInfo info1, BoardInfo info2) {
-            return info1.board.manhattan() - info2.board.manhattan();
+            if (info1.manhattan == -1) info1.manhattan = info1.board.manhattan();
+            if (info2.manhattan == -1) info2.manhattan = info2.board.manhattan();
+            return info1.manhattan - info2.manhattan;
         }
     }
     private int numOfMoves = 0;
