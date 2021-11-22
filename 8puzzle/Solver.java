@@ -72,7 +72,8 @@ public class Solver {
                 return;
             }
             for (Board neighbor : info.board.neighbors()) {
-                pq.insert(new BoardInfo(info.moves + 1, neighbor, info));
+                if (info.parent == null || !neighbor.equals(info.parent.board))
+                    pq.insert(new BoardInfo(info.moves + 1, neighbor, info));
             }
         }
         numOfMoves = -1;
