@@ -10,9 +10,7 @@ public class Board {
             this.col = c;
         }
     }
-    private final int dim;
     private final int[][] tiles;
-    private final int holeRow, holeCol;
     private final int[] twinIndex = new int[2];
     public Board(int[][] tiles) {
         if (tiles == null) throw new IllegalArgumentException();
@@ -22,19 +20,16 @@ public class Board {
                 this.tiles[i][j] = tiles[i][j];
             }
         }
-        this.dim = tiles.length;
-        this.holeRow = findRow(0);
-        this.holeCol = findCol(0);
 
-        int[] tmpIndex = StdRandom.permutation(dim * dim - 1, 2);
+        int[] tmpIndex = StdRandom.permutation(dimension() * dimension() - 1, 2);
         twinIndex[0] = tmpIndex[0];
         twinIndex[1] = tmpIndex[1];
     }
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%d\n", dim));
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        builder.append(String.format("%d\n", dimension()));
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 builder.append(String.format("%d ", tiles[i][j]));
             }
             builder.append("\n");
@@ -42,11 +37,11 @@ public class Board {
         return builder.toString();
     }
     public int dimension() {
-        return dim;
+        return tiles.length;
     }
     private int findRow(int num) {
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 if (tiles[i][j] == num)
                     return i;
             }
@@ -54,8 +49,8 @@ public class Board {
         return -1;
     }
     private int findCol(int num) {
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 if (tiles[i][j] == num)
                     return j;
             }
@@ -63,15 +58,15 @@ public class Board {
         return -1;
     }
     private int ansx(int num) {
-        return (num - 1) % dim;
+        return (num - 1) % dimension();
     }
     private int ansy(int num) {
-        return (num - 1) / dim;
+        return (num - 1) / dimension();
     }
     private int[][] copyTile() {
-        int[][] newtile = new int[dim][dim];
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        int[][] newtile = new int[dimension()][dimension()];
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 newtile[i][j] = tiles[i][j];
             }
         }
@@ -79,9 +74,9 @@ public class Board {
     }
     private Board move(int offsetRow, int offsetCol) {
         int[][] newtile = copyTile();
-        int value = newtile[holeRow + offsetRow][holeCol + offsetCol];
-        newtile[holeRow + offsetRow][holeCol + offsetCol] = 0;
-        newtile[holeRow][holeCol] = value;
+        int value = newtile[findRow(0) + offsetRow][findCol(0) + offsetCol];
+        newtile[findRow(0) + offsetRow][findCol(0) + offsetCol] = 0;
+        newtile[findRow(0)][findCol(0)] = value;
         return new Board(newtile);
     }
     private Board swap(int num1, int num2) {
@@ -97,8 +92,8 @@ public class Board {
     }
     public int hamming() {
         int dist = 0;
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 int num = tiles[i][j];
                 if (num != 0) {
                     int tarx = ansx(num);
@@ -112,8 +107,8 @@ public class Board {
     }
     public int manhattan() {
         int dist = 0;
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 int num = tiles[i][j];
                 if (num != 0) {
                     int tarx = ansx(num);
@@ -126,8 +121,8 @@ public class Board {
         return dist;
     }
     public boolean isGoal() {
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 int num = tiles[i][j];
                 if (num != 0) {
                     int tarx = ansx(num);
@@ -145,10 +140,10 @@ public class Board {
         if (y.getClass() != this.getClass()) return false;
 
         Board that = (Board) y;
-        if (that.dimension() != dim) return false;
+        if (that.dimension() != dimension()) return false;
 
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        for (int i = 0; i < dimension(); i++) {
+            for (int j = 0; j < dimension(); j++) {
                 if (that.tiles[i][j] != tiles[i][j]) {
                     return false;
                 }
@@ -165,9 +160,9 @@ public class Board {
         };
         Queue<Board> result = new Queue<Board>();
         for (Offset offset : options) {
-            int newRow = holeRow + offset.row;
-            int newCol = holeCol + offset.col;
-            if (newRow >= 0 && newRow < dim && newCol >= 0 && newCol < dim) {
+            int newRow = findRow(0) + offset.row;
+            int newCol = findCol(0) + offset.col;
+            if (newRow >= 0 && newRow < dimension() && newCol >= 0 && newCol < dimension()) {
                 result.enqueue(move(offset.row, offset.col));
             }
         }

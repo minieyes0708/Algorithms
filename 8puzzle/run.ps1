@@ -1,2 +1,2 @@
 # java Board
-java Solver puzzle04.txt
+java Solver puzzle11.txt
