@@ -4,6 +4,7 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
+import java.util.NoSuchElementException;
 
 public class Solver {
     private class BoardInfo {
@@ -25,6 +26,7 @@ public class Solver {
                 return info != null;
             }
             public Board next() {
+                if (!hasNext()) throw new NoSuchElementException();
                 Board brd = info.board;
                 info = info.parent;
                 return brd;
