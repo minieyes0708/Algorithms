@@ -11,8 +11,8 @@ public class Board {
         }
     }
     private final int dim;
-    private final Board myTwin;
     private final int[][] tiles;
+    private final int[] twinIndex;
     private final int holeRow, holeCol;
     public Board(int[][] tiles) {
         if (tiles == null) throw new IllegalArgumentException();
@@ -26,8 +26,7 @@ public class Board {
         this.holeRow = findRow(0);
         this.holeCol = findCol(0);
 
-        int[] nums = StdRandom.permutation(dim * dim - 1, 2);
-        myTwin = swap(nums[0] + 1, nums[1] + 1);
+        twinIndex = StdRandom.permutation(dim * dim - 1, 2);
     }
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -173,7 +172,7 @@ public class Board {
         return result;
     }
     public Board twin() {
-        return myTwin;
+        return swap(twinIndex[0] + 1, twinIndex[1] + 1);
     }
     public static void main(String[] args) {
         int[][] tiles = new int[][] {
