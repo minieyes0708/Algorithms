@@ -1,63 +1,18 @@
-import java.util.Iterator;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
-import java.util.NoSuchElementException;
 
 public class Board {
-    private class NeighborIterator implements Iterator<Board> {
-        private class Offset {
-            int row, col;
-            public Offset(int r, int c) {
-                this.row = r;
-                this.col = c;
-            }
-        }
-        private int offsetIndex;
-        private int offsetCount;
-        private int[] offsetRow;
-        private int[] offsetCol;
-        public NeighborIterator() {
-            offsetRow = new int[4];
-            offsetCol = new int[4];
-            Offset[] options = new Offset[] {
-                new Offset( 0, +1), // right
-                new Offset(+1,  0), // bottom
-                new Offset( 0, -1), // left
-                new Offset(-1,  0), // top
-            };
-            for (Offset offset : options) {
-                int newRow = holeRow + offset.row;
-                int newCol = holeCol + offset.col;
-                if (newRow >= 0 && newRow < dim && newCol >= 0 && newCol < dim) {
-                    offsetRow[offsetCount] = offset.row;
-                    offsetCol[offsetCount] = offset.col;
-                    offsetCount++;
-                }
-            }
-        }
-        public boolean hasNext() {
-            return offsetIndex != offsetCount;
-        }
-        public Board next() {
-            if (!hasNext()) throw new NoSuchElementException();
-            int _offsetRow = offsetRow[offsetIndex];
-            int _offsetCol = offsetCol[offsetIndex];
-            offsetIndex++;
-            return move(_offsetRow, _offsetCol);
-        }
-        public void remove() {
-            throw new UnsupportedOperationException();
+    private class Offset {
+        int row, col;
+        public Offset(int r, int c) {
+            this.row = r;
+            this.col = c;
         }
     }
-    private class NeighborIterable implements Iterable<Board> {
-        public Iterator<Board> iterator() {
-            return new NeighborIterator();
-        }
-    }
-
-    private int dim;
-    private int[][] tiles;
-    private int holeRow, holeCol;
+    private final int dim;
+    private final int[][] tiles;
+    private final int holeRow, holeCol;
     public Board(int[][] tiles) {
         if (tiles == null) throw new IllegalArgumentException();
         this.tiles = new int[tiles.length][tiles[0].length];
@@ -66,7 +21,6 @@ public class Board {
                 this.tiles[i][j] = tiles[i][j];
             }
         }
-        this.tiles = tiles;
         this.dim = tiles.length;
         this.holeRow = findRow(0);
         this.holeCol = findCol(0);
@@ -185,7 +139,7 @@ public class Board {
         if (y == null) return false;
         if (y.getClass() != this.getClass()) return false;
 
-        Board that = (Board)y;
+        Board that = (Board) y;
         if (that.dimension() != dim) return false;
 
         for (int i = 0; i < dim; i++) {
@@ -198,7 +152,21 @@ public class Board {
         return true;
     }
     public Iterable<Board> neighbors() {
-        return new NeighborIterable();
+        Offset[] options = new Offset[] {
+            new Offset(0, 1), // right
+            new Offset(1, 0), // bottom
+            new Offset(0, -1), // left
+            new Offset(-1, 0), // top
+        };
+        Queue<Board> result = new Queue<Board>();
+        for (Offset offset : options) {
+            int newRow = holeRow + offset.row;
+            int newCol = holeCol + offset.col;
+            if (newRow >= 0 && newRow < dim && newCol >= 0 && newCol < dim) {
+                result.enqueue(move(offset.row, offset.col));
+            }
+        }
+        return result;
     }
     public Board twin() {
         int[] nums = StdRandom.permutation(dim * dim - 1, 2);

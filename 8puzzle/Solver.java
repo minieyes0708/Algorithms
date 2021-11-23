@@ -1,7 +1,6 @@
 import java.util.Iterator;
 import java.util.Comparator;
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 import java.util.NoSuchElementException;
@@ -46,10 +45,10 @@ public class Solver {
             return info1.manhattan - info2.manhattan;
         }
     }
-    private int numOfMoves = 0;
-    private BoardInfo brdSolution = null;
-    private SolutionIterable iterSolution = new SolutionIterable();
-    private MinPQ<BoardInfo> pq = new MinPQ<BoardInfo>(new ManhattanComparator());
+    private final int numOfMoves;
+    private final BoardInfo brdSolution;
+    private final SolutionIterable iterSolution = new SolutionIterable();
+    private final MinPQ<BoardInfo> pq = new MinPQ<BoardInfo>(new ManhattanComparator());
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         if (initial == null) throw new IllegalArgumentException();
@@ -64,7 +63,7 @@ public class Solver {
                 BoardInfo curr = info;
                 BoardInfo next = null;
                 BoardInfo prev = null;
-                while(curr != null) {
+                while (curr != null) {
                     next = curr.parent;
                     curr.parent = prev;
                     prev = curr;
@@ -79,6 +78,7 @@ public class Solver {
             }
         }
         numOfMoves = -1;
+        brdSolution = null;
     }
     public boolean isSolvable() {
         return brdSolution != null;
