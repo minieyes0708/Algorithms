@@ -48,11 +48,11 @@ public class Solver {
     private final int numOfMoves;
     private final BoardInfo brdSolution;
     private final SolutionIterable iterSolution = new SolutionIterable();
-    private final MinPQ<BoardInfo> pq = new MinPQ<BoardInfo>(new ManhattanComparator());
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         if (initial == null) throw new IllegalArgumentException();
 
+        MinPQ<BoardInfo> pq = new MinPQ<BoardInfo>(new ManhattanComparator());
         pq.insert(new BoardInfo(0, initial, null));
         while (!pq.isEmpty()) {
             BoardInfo info = pq.delMin();
