@@ -59,6 +59,13 @@ public class Board {
     private int[][] tiles;
     private int holeRow, holeCol;
     public Board(int[][] tiles) {
+        if (tiles == null) throw new IllegalArgumentException();
+        this.tiles = new int[tiles.length][tiles[0].length];
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                this.tiles[i][j] = tiles[i][j];
+            }
+        }
         this.tiles = tiles;
         this.dim = tiles.length;
         this.holeRow = findRow(0);
