@@ -73,7 +73,17 @@ public class Solver {
                 return;
             }
             for (Board neighbor : info.board.neighbors()) {
-                if (info.parent == null || !neighbor.equals(info.parent.board))
+                boolean found = false;
+                BoardInfo curinfo = info;
+                while (true) {
+                    if (curinfo.parent == null) break;
+                    if (neighbor.equals(curinfo.parent.board)) {
+                        found = true;
+                        break;
+                    }
+                    curinfo = curinfo.parent;
+                }
+                if (!found)
                     pq.insert(new BoardInfo(info.moves + 1, neighbor, info));
             }
         }
