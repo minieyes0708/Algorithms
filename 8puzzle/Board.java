@@ -12,8 +12,8 @@ public class Board {
     }
     private final int dim;
     private final int[][] tiles;
-    private final int[] twinIndex;
     private final int holeRow, holeCol;
+    private final int[] twinIndex = new int[2];
     public Board(int[][] tiles) {
         if (tiles == null) throw new IllegalArgumentException();
         this.tiles = new int[tiles.length][tiles[0].length];
@@ -26,7 +26,9 @@ public class Board {
         this.holeRow = findRow(0);
         this.holeCol = findCol(0);
 
-        twinIndex = StdRandom.permutation(dim * dim - 1, 2);
+        int[] tmpIndex = StdRandom.permutation(dim * dim - 1, 2);
+        twinIndex[0] = tmpIndex[0];
+        twinIndex[1] = tmpIndex[1];
     }
     public String toString() {
         StringBuilder builder = new StringBuilder();
