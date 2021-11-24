@@ -11,7 +11,7 @@ public class Board {
         }
     }
     private final int[][] tiles;
-    private final int[] twinIndex = new int[2];
+    // private final int[] twinIndex = new int[2];
     public Board(int[][] tiles) {
         if (tiles == null) throw new IllegalArgumentException();
         this.tiles = new int[tiles.length][tiles[0].length];
@@ -21,9 +21,9 @@ public class Board {
             }
         }
 
-        int[] tmpIndex = StdRandom.permutation(dimension() * dimension() - 1, 2);
-        twinIndex[0] = tmpIndex[0];
-        twinIndex[1] = tmpIndex[1];
+        // int[] tmpIndex = StdRandom.permutation(dimension() * dimension() - 1, 2);
+        // twinIndex[0] = tmpIndex[0];
+        // twinIndex[1] = tmpIndex[1];
     }
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -110,12 +110,12 @@ public class Board {
         for (int i = 0; i < dimension(); i++) {
             for (int j = 0; j < dimension(); j++) {
                 int num = tiles[i][j];
-                if (num != 0) {
+                // if (num != 0) {
                     int tarx = ansx(num);
                     int tary = ansy(num);
                     if (i == tary && j == tarx) continue;
                     dist += Math.abs(i - tary) + Math.abs(j - tarx);
-                }
+                // }
             }
         }
         return dist;
@@ -169,7 +169,8 @@ public class Board {
         return result;
     }
     public Board twin() {
-        return swap(twinIndex[0] + 1, twinIndex[1] + 1);
+        return swap(1, 2);
+        // return swap(twinIndex[0] + 1, twinIndex[1] + 1);
     }
     public static void main(String[] args) {
         int[][] tiles = new int[][] {
