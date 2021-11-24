@@ -42,7 +42,7 @@ public class Solver {
         public int compare(BoardInfo info1, BoardInfo info2) {
             if (info1.manhattan == -1) info1.manhattan = info1.board.manhattan();
             if (info2.manhattan == -1) info2.manhattan = info2.board.manhattan();
-            return info1.manhattan - info2.manhattan;
+            return (info1.manhattan + info1.moves) - (info2.manhattan + info2.moves);
         }
     }
     private final int numOfMoves;
@@ -55,6 +55,12 @@ public class Solver {
         MinPQ<BoardInfo> pq = new MinPQ<BoardInfo>(new ManhattanComparator());
         pq.insert(new BoardInfo(0, initial, null));
         while (!pq.isEmpty()) {
+            // StdOut.println("==========");
+            // for (BoardInfo ifo : pq) {
+                // StdOut.printf("%s moves = %d, manhattan = %d\n",
+                    // ifo.board.toString(),
+                    // ifo.moves, ifo.manhattan);
+            // }
             BoardInfo info = pq.delMin();
             if (info.board.isGoal())
             {
