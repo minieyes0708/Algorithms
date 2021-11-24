@@ -110,12 +110,12 @@ public class Board {
         for (int i = 0; i < dimension(); i++) {
             for (int j = 0; j < dimension(); j++) {
                 int num = tiles[i][j];
-                // if (num != 0) {
+                if (num != 0) {
                     int tarx = ansx(num);
                     int tary = ansy(num);
                     if (i == tary && j == tarx) continue;
                     dist += Math.abs(i - tary) + Math.abs(j - tarx);
-                // }
+                }
             }
         }
         return dist;
