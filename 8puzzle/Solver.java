@@ -91,7 +91,10 @@ public class Solver {
             result.enqueue(curbrd.board);
             curbrd = curbrd.parent;
         }
-        return result;
+        if (result.isEmpty())
+            return null;
+        else
+            return result;
     }
     public static void main(String[] args) {
         // create initial board from file
