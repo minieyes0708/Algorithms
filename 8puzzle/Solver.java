@@ -52,17 +52,7 @@ public class Solver {
     }
     private void addNeighbors(BoardInfo info, MinPQ<BoardInfo> pq) {
         for (Board neighbor : info.board.neighbors()) {
-            boolean found = false;
-            BoardInfo curinfo = info;
-            while (true) {
-                if (curinfo.parent == null) break;
-                if (neighbor.equals(curinfo.parent.board)) {
-                    found = true;
-                    break;
-                }
-                curinfo = curinfo.parent;
-            }
-            if (!found)
+            if (neighbor.equals(info.board))
                 pq.insert(new BoardInfo(info.moves + 1, neighbor, info));
         }
     }
