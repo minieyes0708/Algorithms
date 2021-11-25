@@ -89,14 +89,6 @@ public class Solver {
                     }
                     curinfo = curinfo.parent;
                 }
-                if (!found) {
-                    for (BoardInfo ifo : pq) {
-                        if (neighbor.equals(ifo.board)) {
-                            found = true;
-                            break;
-                        }
-                    }
-                }
                 if (!found)
                     pq.insert(new BoardInfo(info.moves + 1, neighbor, info));
             }
