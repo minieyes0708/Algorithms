@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.RectHV;
@@ -126,49 +127,48 @@ public class KdTree {
         range_x(root, rect, bag);
         return bag;
     }
-    private Point2D nearest_x(Node curnode, Point2D p, Point2D best) {
-        if (curnode == null) return best;
-
-        if (best != null &&
-                curnode.pt.distanceSquaredTo(p) < best.distanceSquaredTo(p))
-            best = curnode.pt;
-
-        RectHV left = new RectHV(0, 0, curnode.pt.x(), 1);
-        RectHV right = new RectHV(curnode.pt.x(), 0, 1, 1);
-
-        if (p.x() < curnode.pt.x()) {
-            best = nearest_y(curnode.left, p, best);
-            if (right.distanceSquaredTo(p) < best.distanceSquaredTo(p)) {
-                best = nearest_y(curnode.right, p, best);
-            }
-        }
-        else {
-            best = nearest_y(curnode.right, p, best);
-            if (left.distanceSquaredTo(p) < best.distanceSquaredTo(p)) {
-                best = nearest_y(curnode.left, p, best);
-            }
-        }
-        return best;
-    }
-    private Point2D nearest_y(Node curnode, Point2D p, Point2D best) {
+    private Point2D nearest_x(Node curnode, Point2D p, Point2D best, RectHV pRect) {
         if (curnode == null) return best;
 
         if (curnode.pt.distanceSquaredTo(p) < best.distanceSquaredTo(p))
             best = curnode.pt;
 
-        RectHV top = new RectHV(0, curnode.pt.y(), 1, 1);
-        RectHV bottom = new RectHV(0, 0, 1, curnode.pt.y());
+        RectHV left = new RectHV(pRect.xmin(), pRect.ymin(), curnode.pt.x(), pRect.ymax());
+        RectHV right = new RectHV(curnode.pt.x(), pRect.ymin(), pRect.xmax(), pRect.ymax());
 
-        if (p.y() < curnode.pt.y()) {
-            best = nearest_x(curnode.left, p, best);
-            if (top.distanceSquaredTo(p) < best.distanceSquaredTo(p)) {
-                best = nearest_x(curnode.right, p, best);
+        if (p.x() < curnode.pt.x()) {
+            best = nearest_y(curnode.left, p, best, left);
+            if (right.distanceSquaredTo(p) < best.distanceSquaredTo(p)) {
+                best = nearest_y(curnode.right, p, best, right);
             }
         }
         else {
-            best = nearest_x(curnode.right, p, best);
+            best = nearest_y(curnode.right, p, best, right);
+            if (left.distanceSquaredTo(p) < best.distanceSquaredTo(p)) {
+                best = nearest_y(curnode.left, p, best, left);
+            }
+        }
+        return best;
+    }
+    private Point2D nearest_y(Node curnode, Point2D p, Point2D best, RectHV pRect) {
+        if (curnode == null) return best;
+
+        if (curnode.pt.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+            best = curnode.pt;
+
+        RectHV top = new RectHV(pRect.xmin(), curnode.pt.y(), pRect.xmax(), pRect.ymax());
+        RectHV bottom = new RectHV(pRect.xmin(), pRect.ymin(), pRect.xmax(), curnode.pt.y());
+
+        if (p.y() < curnode.pt.y()) {
+            best = nearest_x(curnode.left, p, best, bottom);
+            if (top.distanceSquaredTo(p) < best.distanceSquaredTo(p)) {
+                best = nearest_x(curnode.right, p, best, top);
+            }
+        }
+        else {
+            best = nearest_x(curnode.right, p, best, top);
             if (bottom.distanceSquaredTo(p) < best.distanceSquaredTo(p)) {
-                best = nearest_x(curnode.left, p, best);
+                best = nearest_x(curnode.left, p, best, bottom);
             }
         }
         return best;
@@ -176,28 +176,26 @@ public class KdTree {
     public Point2D nearest(Point2D p) {
         if (p == null) throw new IllegalArgumentException();
         if (root == null) return null;
-        return nearest_x(root, p, root.pt);
+        return nearest_x(root, p, root.pt, new RectHV(0, 0, 1, 1));
     }
     public static void main(String[] args) {
         // StdDraw.enableDoubleBuffering();
         KdTree kdtree = new KdTree();
-        kdtree.insert(new Point2D(0.5, 0.5));
-        StdOut.printf("contains = %s\n", kdtree.contains(new Point2D(0.5, 0.5)));
-        // In in = new In(args[0]);
-        // while (!in.isEmpty()) {
-            // Point2D p = new Point2D(in.readDouble(), in.readDouble());
-            // kdtree.insert(p);
-        // }
-        // kdtree.draw();
+        In in = new In(args[0]);
+        while (!in.isEmpty()) {
+            Point2D p = new Point2D(in.readDouble(), in.readDouble());
+            kdtree.insert(p);
+        }
+        kdtree.draw();
 
-        // Point2D pt = new Point2D(0.8, 0.8);
-        // StdDraw.setPenRadius(POINT_RADIUS *2);
-        // StdDraw.setPenColor(StdDraw.ORANGE);
-        // pt.draw();
-        // Point2D pt2 = kdtree.nearest(pt);
-        // StdDraw.setPenRadius(POINT_RADIUS *2);
-        // StdDraw.setPenColor(StdDraw.YELLOW);
-        // pt2.draw();
+        Point2D pt = new Point2D(0.23, 0.67);
+        StdDraw.setPenRadius(POINT_RADIUS *2);
+        StdDraw.setPenColor(StdDraw.ORANGE);
+        pt.draw();
+        Point2D pt2 = kdtree.nearest(pt);
+        StdDraw.setPenRadius(POINT_RADIUS *2);
+        StdDraw.setPenColor(StdDraw.YELLOW);
+        pt2.draw();
 
         // RectHV rect = new RectHV(0.2, 0.2, 0.8, 0.8);
         // StdDraw.setPenRadius(POINT_RADIUS);
@@ -207,6 +205,6 @@ public class KdTree {
         // }
         // rect.draw();
 
-        // StdDraw.show();
+        StdDraw.show();
     }
 }
