@@ -174,6 +174,7 @@ public class KdTree {
     }
     public Point2D nearest(Point2D p) {
         if (p == null) throw new IllegalArgumentException();
+        if (root == null) return null;
         return nearest_x(root, p, root.pt);
     }
     public static void main(String[] args) {
