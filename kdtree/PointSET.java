@@ -26,6 +26,7 @@ public class PointSET {
             pt.draw();
     }
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) throw new IllegalArgumentException();
         Queue<Point2D> result = new Queue<Point2D>();
         for (Point2D pt : set) {
             if (rect.contains(pt)) {
@@ -35,6 +36,7 @@ public class PointSET {
         return result;
     }
     public Point2D nearest(Point2D p) {
+        if (p == null) throw new IllegalArgumentException();
         Point2D minpt = null;
         double mindist = 0.0;
         for (Point2D pt : set) {
