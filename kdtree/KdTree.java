@@ -59,11 +59,13 @@ public class KdTree {
     }
     private boolean contains_x(Node curnode, Point2D p) {
         if (curnode == null) return false;
+        if (curnode.pt.equals(p)) return true;
         if (p.x() < curnode.pt.x()) return contains_y(curnode.left, p);
         else return contains_y(curnode.right, p);
     }
     private boolean contains_y(Node curnode, Point2D p) {
         if (curnode == null) return false;
+        if (curnode.pt.equals(p)) return true;
         if (p.y() < curnode.pt.y()) return contains_x(curnode.left, p);
         else return contains_x(curnode.right, p);
     }
@@ -175,18 +177,16 @@ public class KdTree {
         return nearest_x(root, p, root.pt);
     }
     public static void main(String[] args) {
-        StdDraw.enableDoubleBuffering();
+        // StdDraw.enableDoubleBuffering();
         KdTree kdtree = new KdTree();
-        kdtree.insert(new Point2D(1.0, 1.0));
-        kdtree.insert(new Point2D(0.0, 1.0));
-        kdtree.insert(new Point2D(0.0, 1.0));
-        StdOut.printf("size = %d\n", kdtree.size());
+        kdtree.insert(new Point2D(0.5, 0.5));
+        StdOut.printf("contains = %s\n", kdtree.contains(new Point2D(0.5, 0.5)));
         // In in = new In(args[0]);
         // while (!in.isEmpty()) {
             // Point2D p = new Point2D(in.readDouble(), in.readDouble());
             // kdtree.insert(p);
         // }
-        kdtree.draw();
+        // kdtree.draw();
 
         // Point2D pt = new Point2D(0.8, 0.8);
         // StdDraw.setPenRadius(POINT_RADIUS *2);
@@ -200,11 +200,11 @@ public class KdTree {
         // RectHV rect = new RectHV(0.2, 0.2, 0.8, 0.8);
         // StdDraw.setPenRadius(POINT_RADIUS);
         // StdDraw.setPenColor(StdDraw.YELLOW);
-        // for (Point2D pt : kdtree.range(rect)) {
+        // for (Point2D pt : kdtree.range(null)) {
             // pt.draw();
         // }
         // rect.draw();
 
-        StdDraw.show();
+        // StdDraw.show();
     }
 }
