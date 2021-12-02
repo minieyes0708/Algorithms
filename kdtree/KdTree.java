@@ -116,8 +116,8 @@ public class KdTree {
 
         RectHV top = new RectHV(0, curnode.pt.y(), 1, 1);
         RectHV bottom = new RectHV(0, 0, 1, curnode.pt.y());
-        if (rect.intersects(top)) range_y(curnode.right, rect, bag);
-        if (rect.intersects(bottom)) range_y(curnode.left, rect, bag);
+        if (rect.intersects(top)) range_x(curnode.right, rect, bag);
+        if (rect.intersects(bottom)) range_x(curnode.left, rect, bag);
     }
     public Iterable<Point2D> range(RectHV rect) {
         if (rect == null) throw new IllegalArgumentException();
