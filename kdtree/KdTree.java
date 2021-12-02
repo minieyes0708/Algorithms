@@ -1,4 +1,3 @@
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.RectHV;
@@ -55,6 +54,7 @@ public class KdTree {
         return curnode;
     }
     public void insert(Point2D p) {
+        if (p == null) throw new IllegalArgumentException();
         root = insert_x(root, p);
     }
     private boolean contains_x(Node curnode, Point2D p) {
@@ -70,6 +70,7 @@ public class KdTree {
         else return contains_x(curnode.right, p);
     }
     public boolean contains(Point2D p) {
+        if (p == null) throw new IllegalArgumentException();
         return contains_x(root, p);
     }
     private void draw_x(Node curnode) {
