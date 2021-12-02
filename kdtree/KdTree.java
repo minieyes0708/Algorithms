@@ -1,10 +1,14 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Bag;
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree {
+    private static final double POINT_RADIUS = 0.02;
+    private static final double LINE_RADIUS = 0.005;
+
     private class Node {
         Point2D pt;
         Node left, right;
@@ -14,34 +18,43 @@ public class KdTree {
             pt = new Point2D(x, y);
         }
     }
-    private int N;
+    private int count;
     private Node root;
-    private static final double ptRadius = 0.02;
-    private static final double lineRadius = 0.005;
     public KdTree() {
-        N = 0;
+        count = 0;
         root = null;
     }
     public boolean isEmpty() {
-        return N == 0;
+        return count == 0;
     }
     public int size() {
-        return N;
+        return count;
     }
     private Node insert_x(Node curnode, Point2D p) {
-        if (curnode == null) return new Node(p.x(), p.y());
+        if (curnode == null)
+        {
+            count++;
+            return new Node(p.x(), p.y());
+        }
+        if (p.equals(curnode.pt)) return curnode;
+
         if (p.x() < curnode.pt.x()) curnode.left = insert_y(curnode.left, p);
         else curnode.right = insert_y(curnode.right, p);
         return curnode;
     }
     private Node insert_y(Node curnode, Point2D p) {
-        if (curnode == null) return new Node(p.x(), p.y());
+        if (curnode == null)
+        {
+            count++;
+            return new Node(p.x(), p.y());
+        }
+        if (p.equals(curnode.pt)) return curnode;
+
         if (p.y() < curnode.pt.y()) curnode.left = insert_x(curnode.left, p);
         else curnode.right = insert_x(curnode.right, p);
         return curnode;
     }
     public void insert(Point2D p) {
-        N++;
         root = insert_x(root, p);
     }
     private boolean contains_x(Node curnode, Point2D p) {
@@ -60,10 +73,10 @@ public class KdTree {
     private void draw_x(Node curnode) {
         if (curnode == null) return;
 
-        StdDraw.setPenRadius(ptRadius);
+        StdDraw.setPenRadius(POINT_RADIUS);
         StdDraw.setPenColor(StdDraw.BLACK);
         curnode.pt.draw();
-        StdDraw.setPenRadius(lineRadius);
+        StdDraw.setPenRadius(LINE_RADIUS);
         StdDraw.setPenColor(StdDraw.RED);
         StdDraw.line(curnode.pt.x(), 0, curnode.pt.x(), 1);
 
@@ -73,10 +86,10 @@ public class KdTree {
     private void draw_y(Node curnode) {
         if (curnode == null) return;
 
-        StdDraw.setPenRadius(ptRadius);
+        StdDraw.setPenRadius(POINT_RADIUS);
         StdDraw.setPenColor(StdDraw.BLACK);
         curnode.pt.draw();
-        StdDraw.setPenRadius(lineRadius);
+        StdDraw.setPenRadius(LINE_RADIUS);
         StdDraw.setPenColor(StdDraw.BLUE);
         StdDraw.line(0, curnode.pt.y(), 1, curnode.pt.y());
 
@@ -105,6 +118,7 @@ public class KdTree {
         if (rect.intersects(bottom)) range_y(curnode.left, rect, bag);
     }
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) throw new IllegalArgumentException();
         Bag<Point2D> bag = new Bag<Point2D>();
         range_x(root, rect, bag);
         return bag;
@@ -157,29 +171,34 @@ public class KdTree {
         return best;
     }
     public Point2D nearest(Point2D p) {
+        if (p == null) throw new IllegalArgumentException();
         return nearest_x(root, p, root.pt);
     }
     public static void main(String[] args) {
         StdDraw.enableDoubleBuffering();
         KdTree kdtree = new KdTree();
-        In in = new In(args[0]);
-        while (!in.isEmpty()) {
-            Point2D p = new Point2D(in.readDouble(), in.readDouble());
-            kdtree.insert(p);
-        }
+        kdtree.insert(new Point2D(1.0, 1.0));
+        kdtree.insert(new Point2D(0.0, 1.0));
+        kdtree.insert(new Point2D(0.0, 1.0));
+        StdOut.printf("size = %d\n", kdtree.size());
+        // In in = new In(args[0]);
+        // while (!in.isEmpty()) {
+            // Point2D p = new Point2D(in.readDouble(), in.readDouble());
+            // kdtree.insert(p);
+        // }
         kdtree.draw();
 
-        Point2D pt = new Point2D(0.8, 0.8);
-        StdDraw.setPenRadius(ptRadius *2);
-        StdDraw.setPenColor(StdDraw.ORANGE);
-        pt.draw();
-        Point2D pt2 = kdtree.nearest(pt);
-        StdDraw.setPenRadius(ptRadius *2);
-        StdDraw.setPenColor(StdDraw.YELLOW);
-        pt2.draw();
+        // Point2D pt = new Point2D(0.8, 0.8);
+        // StdDraw.setPenRadius(POINT_RADIUS *2);
+        // StdDraw.setPenColor(StdDraw.ORANGE);
+        // pt.draw();
+        // Point2D pt2 = kdtree.nearest(pt);
+        // StdDraw.setPenRadius(POINT_RADIUS *2);
+        // StdDraw.setPenColor(StdDraw.YELLOW);
+        // pt2.draw();
 
         // RectHV rect = new RectHV(0.2, 0.2, 0.8, 0.8);
-        // StdDraw.setPenRadius(ptRadius);
+        // StdDraw.setPenRadius(POINT_RADIUS);
         // StdDraw.setPenColor(StdDraw.YELLOW);
         // for (Point2D pt : kdtree.range(rect)) {
             // pt.draw();

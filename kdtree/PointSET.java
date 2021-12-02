@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.Point2D;
 
 public class PointSET {
-    private SET<Point2D> set;
+    private final SET<Point2D> set;
     public PointSET() {
         set = new SET<Point2D>();
     }
